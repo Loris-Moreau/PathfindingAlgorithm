@@ -128,7 +128,22 @@ int main()
 
     Node start{0, 0, 0, 0, 0, false}; // Set start node
     Node goal{rows - 1, cols - 1, 0, 0, 0, false};  // Set goal node
-
+    
+    Node obstacle1{0, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle2{1, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle3{2, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle4{3, 5, 0, 0, 0, true};  // Set Obstacle node
+    
+    Node obstacle5{6, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle6{7, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle7{8, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle8{9, 5, 0, 0, 0, true};  // Set Obstacle node
+    
+    Node obstacle9{3, 7, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle10{4, 7, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle11{5, 7, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle12{6, 7, 0, 0, 0, true};  // Set Obstacle node
+    
     // Call A* algorithm
     std::vector<Node> path = astar(start, goal, grid);
 

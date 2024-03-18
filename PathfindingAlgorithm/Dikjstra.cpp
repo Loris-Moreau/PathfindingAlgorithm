@@ -27,10 +27,10 @@ int minDistance(int dist[], bool sptSet[])
 
 void printSolution(int dist[])
 {
-	cout << "Vertex \t\t Distance from Source" << endl;
+	cout << "Vertex \t\t Distance from Source" << '\n';
 	for (int i = 0; i < V; i++)
 	{
-		cout << i << " \t\t" << dist[i] << endl;
+		cout << i << " \t\t" << dist[i] << '\n';
 	}
 }
 
