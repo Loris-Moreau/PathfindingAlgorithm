@@ -2,7 +2,8 @@
 using namespace std;
 
 #include <climits>
-int inf = std::numeric_limits<int>::max();
+
+//int inf = std::numeric_limits<int>::max();
 
 enum
 {
@@ -63,20 +64,20 @@ void dijkstra(int graph[V][V], int src)
 	printSolution(dist);
 }
 
+/*
 int main()
 {
 	int graph[V][V] =
 	{
-		0, 10, 15, inf, 30, inf, inf,
-		inf, 0, inf, inf, inf, 57, inf,
-		15, inf, 0, 16, inf, inf, 52,
-		inf, inf, 13, 0, inf, inf, inf,
-		30, inf, inf, inf, 0, 11, 34,
-		inf, 49, inf, inf, 12, 0, inf,
-		inf, inf, 63, inf, 35, inf, 0
+		0, 10, 15, NULL, 30, NULL, NULL,
+		NULL, 0, NULL, NULL, NULL, 57, NULL,
+		15, NULL, 0, 16, NULL, NULL, 52,
+		NULL, NULL, 13, 0, NULL, NULL, NULL,
+		30, NULL, NULL, NULL, 0, 11, 34,
+		NULL, 49, NULL, NULL, 12, 0, NULL,
+		NULL, NULL, 63, NULL, 35, NULL, 0
 	};
-
 	dijkstra(graph, 0);
-
 	return 0;
 }
+*/
