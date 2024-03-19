@@ -44,7 +44,7 @@ float getTerrainCost(const Node& node)
         case Difficult:
             return 2.0f;
         case Obstacle:
-            return std::numeric_limits<float>::infinity();
+            return NULL;
     }
 }
 
@@ -119,7 +119,7 @@ std::vector<Node*> astar(Node* start, const Node* goal, std::vector<std::vector<
                 bool isNewPath = false;
 
                 // Check if the child is already in the open list
-                auto it = std::find(openList.begin(), openList.end(), &child);
+                auto it = find(openList.begin(), openList.end(), &child);
                 if (it == openList.end())
                 {
                     isNewPath = true;
@@ -154,23 +154,23 @@ void printGridWithPath(const std::vector<std::vector<Node>>& grid, const std::ve
             const Node& node = grid[i][j];
             if (std::find(path.begin(), path.end(), &node) != path.end())
             {
-                std::cout << "* "; // Mark path nodes with *
+                std::cout << " * "; // Mark path nodes with *
             }
             else if (node.obstacle || node.terrain == Obstacle)
             {
-                std::cout << "X "; // Mark obstacle nodes with X
+                std::cout << " X "; // Mark obstacle nodes with X
             }
             else if(node.terrain == Normal)
             {
-                std::cout << "N "; // Mark empty nodes with E
+                std::cout << " . "; // Mark Normal nodes with .
             }
             else if(node.terrain == Challenging)
             {
-                std::cout << "C "; // Mark empty nodes with E
+                std::cout << " C "; // Mark Challenging nodes with C
             }
             else if(node.terrain == Difficult)
             {
-                std::cout << "D "; // Mark empty nodes with E
+                std::cout << " D "; // Mark Difficult nodes with D
             }
             else
             {
@@ -233,6 +233,11 @@ int main()
     grid[6][8].obstacle = true;
     grid[6][9].obstacle = true;
     
+    grid[8][5].obstacle = true;
+    grid[8][6].obstacle = true;
+    grid[8][7].obstacle = true;
+    grid[8][8].obstacle = true;
+    
     grid[5][5].terrain = Challenging;
     
     grid[6][0].terrain = Challenging;
@@ -245,10 +250,6 @@ int main()
     grid[8][2].terrain = Difficult;
     grid[8][3].terrain = Difficult;
     grid[8][4].terrain = Difficult;
-    grid[8][5].obstacle = true;
-    grid[8][6].obstacle = true;
-    grid[8][7].obstacle = true;
-    grid[8][8].obstacle = true;
     grid[8][9].terrain = Difficult;
     
     // Call A* algorithm
@@ -260,8 +261,8 @@ int main()
         std::cout << "Path found :\n";
         for (const auto& node : path)
         {
-            std::cout << "(" << node->x << ", " << node->y << ") ";
-            std::cout << getTerrainCost(*node);
+            std::cout << getTerrainCost(*node) << " -> ";
+            std::cout << "(" << node->x << ", " << node->y << ") | ";
         }
         std::cout << '\n';
 
@@ -271,7 +272,8 @@ int main()
     }
     else
     {
-        std::cout << "No path found !\n";
+        std::cout << "Insanity is doing the same thing over and over again and expecting different results. \n";
+        printGridWithPath(grid, path);
     }
     return 0;
 }
