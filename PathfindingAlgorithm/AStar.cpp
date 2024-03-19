@@ -45,12 +45,10 @@ float getTerrainCost(const Node& node)
             return 2.0f;
         case Obstacle:
             return std::numeric_limits<float>::infinity();
-        default:
-            return 1.0f;
     }
 }
 
-std::vector<Node*> astar(Node* start, Node* goal, std::vector<std::vector<Node>>& grid)
+std::vector<Node*> astar(Node* start, const Node* goal, std::vector<std::vector<Node>>& grid)
 {
     start->terrain = Normal;
     start->terrainCostMultiplier = getTerrainCost(*start);
@@ -95,8 +93,8 @@ std::vector<Node*> astar(Node* start, Node* goal, std::vector<std::vector<Node>>
                 {
                     continue; // Skip the current node
                 }
-                int newX = current->x + dx;
-                int newY = current->y + dy;
+                const int newX = current->x + dx;
+                const int newY = current->y + dy;
 
                 if (newX < 0 || newX >= rows || newY < 0 || newY >= cols)
                 {
@@ -117,7 +115,7 @@ std::vector<Node*> astar(Node* start, Node* goal, std::vector<std::vector<Node>>
                     continue;
                 }
 
-                float tentative_g = current->g + distance(*current, child) * child.terrainCostMultiplier;
+                const float tentative_g = current->g + distance(*current, child) * child.terrainCostMultiplier;
                 bool isNewPath = false;
 
                 // Check if the child is already in the open list
@@ -154,7 +152,6 @@ void printGridWithPath(const std::vector<std::vector<Node>>& grid, const std::ve
         for (int j = 0; j < cols; ++j)
         {
             const Node& node = grid[i][j];
-            Node nodal = grid[i][j];
             if (std::find(path.begin(), path.end(), &node) != path.end())
             {
                 std::cout << "* "; // Mark path nodes with *
@@ -187,7 +184,7 @@ void printGridWithPath(const std::vector<std::vector<Node>>& grid, const std::ve
 int main()
 {
     std::vector<std::vector<Node>> grid(rows, std::vector<Node>(cols));
-
+   
     // Initialize grid with nodes and set obstacles
     for (int i = 0; i < rows; ++i)
     {
@@ -195,7 +192,6 @@ int main()
         {
             grid[i][j].x = i;
             grid[i][j].y = j;
-            grid[i][j].obstacle = false;
             grid[i][j].parent = nullptr;
             
             // Assign terrain types
@@ -206,48 +202,57 @@ int main()
             else
             {
                 grid[i][j].terrain = Normal;
-                grid[i][j].terrainCostMultiplier = getTerrainCost(grid[i][j]);
             }
+            grid[i][j].terrainCostMultiplier = getTerrainCost(grid[i][j]);
         }
     }
-
-    Node* start = grid[0].data(); // Set start node
-    Node* goal = &grid[rows - 1][cols - 1];  // Set goal node
     
-    // Set obstacles
-    grid[5][0].obstacle = true;
-    grid[5][1].obstacle = true;
-    grid[5][2].obstacle = true;
-    grid[5][3].obstacle = true;
-    grid[5][6].obstacle = true;
-    grid[5][7].obstacle = true;
-    grid[5][8].obstacle = true;
-    grid[5][9].obstacle = true;
-    grid[7][3].obstacle = true;
-    grid[7][4].obstacle = true;
-    grid[7][5].obstacle = true;
-    grid[7][6].obstacle = true;
+    Node* start = grid[0].data(); // Set start node
+    const Node* goal = &grid[rows - 1][cols - 1];  // Set goal node
+    
+    // Set Nodes
+    grid[1][6].obstacle = true;
+    grid[1][7].obstacle = true;
+    grid[1][8].obstacle = true;
+    
+    grid[2][0].obstacle = true;
     grid[2][1].obstacle = true;
     grid[2][2].obstacle = true;
     grid[2][3].obstacle = true;
     grid[2][4].obstacle = true;
     grid[2][5].obstacle = true;
-    grid[2][6].obstacle = true;
-    grid[2][7].obstacle = true;
-    grid[2][8].obstacle = true;
     
-    grid[5][4].terrain = Challenging;
+    grid[4][5].obstacle = true;
+    grid[4][6].obstacle = true;
+    grid[4][7].obstacle = true;
+    grid[4][8].obstacle = true;
+    grid[4][9].obstacle = true;
     
-    grid[6][6].terrain = Difficult;
-    grid[6][7].terrain = Difficult;
-    grid[6][8].terrain = Difficult;
+    grid[6][6].obstacle = true;
+    grid[6][7].obstacle = true;
+    grid[6][8].obstacle = true;
+    grid[6][9].obstacle = true;
+    
+    grid[5][5].terrain = Challenging;
+    
+    grid[6][0].terrain = Challenging;
+    grid[6][1].terrain = Challenging;
+    grid[6][2].terrain = Challenging;
+    grid[6][3].terrain = Challenging;
+
+    grid[5][3].terrain = Difficult;
     
     grid[8][2].terrain = Difficult;
     grid[8][3].terrain = Difficult;
     grid[8][4].terrain = Difficult;
+    grid[8][5].obstacle = true;
+    grid[8][6].obstacle = true;
+    grid[8][7].obstacle = true;
+    grid[8][8].obstacle = true;
+    grid[8][9].terrain = Difficult;
     
     // Call A* algorithm
-    std::vector<Node*> path = astar(start, goal, grid);
+    const std::vector<Node*> path = astar(start, goal, grid);
 
     // Print the path
     if (!path.empty())
@@ -256,6 +261,7 @@ int main()
         for (const auto& node : path)
         {
             std::cout << "(" << node->x << ", " << node->y << ") ";
+            std::cout << getTerrainCost(*node);
         }
         std::cout << '\n';
 
@@ -267,6 +273,5 @@ int main()
     {
         std::cout << "No path found !\n";
     }
-
     return 0;
 }
