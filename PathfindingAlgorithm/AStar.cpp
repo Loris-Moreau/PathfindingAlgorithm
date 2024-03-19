@@ -128,21 +128,31 @@ int main()
 
     Node start{0, 0, 0, 0, 0, false}; // Set start node
     Node goal{rows - 1, cols - 1, 0, 0, 0, false};  // Set goal node
+
+    //Obstacles
+    Node obstacle1{5, 0, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle2{5, 1, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle3{5, 2, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle4{5, 3, 0, 0, 0, true};  // Set Obstacle node
     
-    Node obstacle1{0, 5, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle2{1, 5, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle3{2, 5, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle4{3, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle5{5, 6, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle6{5, 7, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle7{5, 8, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle8{5, 9, 0, 0, 0, true};  // Set Obstacle node
     
-    Node obstacle5{6, 5, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle6{7, 5, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle7{8, 5, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle8{9, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle9{7, 3, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle10{7, 4, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle11{7, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle12{7, 6, 0, 0, 0, true};  // Set Obstacle node
     
-    Node obstacle9{3, 7, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle10{4, 7, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle11{5, 7, 0, 0, 0, true};  // Set Obstacle node
-    Node obstacle12{6, 7, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle13{2, 1, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle14{2, 2, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle15{2, 3, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle16{2, 4, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle17{2, 5, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle18{2, 6, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle19{2, 7, 0, 0, 0, true};  // Set Obstacle node
+    Node obstacle20{2, 8, 0, 0, 0, true};  // Set Obstacle node
     
     // Call A* algorithm
     std::vector<Node> path = astar(start, goal, grid);
