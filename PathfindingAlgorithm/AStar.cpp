@@ -10,7 +10,7 @@ enum Terrain
 {
     Normal,
     Challenging,
-    Dificult,
+    Difficult,
     Obstacle
 };
 
@@ -20,21 +20,40 @@ struct Node
     float g, h, f; // Cost values
     bool obstacle; // Flag to indicate if the node is an obstacle
     Node* parent; // Pointer to the parent node
+    Terrain terrain; // Terrain type of the node
+    float terrainCostMultiplier; // Cost multiplier based on terrain type
     bool operator==(const Node& other) const
     {
         return x == other.x && y == other.y;
     }
-    Terrain terrain;
 };
 
 float distance(const Node& node1, const Node& node2)
 {
-    return sqrt(std::pow(node1.x - node2.x, 2) + pow(node1.y - node2.y, 2));
+    return sqrt(pow(node1.x - node2.x, 2) + pow(node1.y - node2.y, 2));
+}
+
+float getTerrainCost(const Node& node)
+{
+    switch (node.terrain)
+    {
+        case Normal:
+            return 1.0f;
+        case Challenging:
+            return 1.5f;
+        case Difficult:
+            return 2.0f;
+        case Obstacle:
+            return std::numeric_limits<float>::infinity();
+        default:
+            return 1.0f;
+    }
 }
 
 std::vector<Node*> astar(Node* start, Node* goal, std::vector<std::vector<Node>>& grid)
 {
-    start->terrain = Terrain::Normal;
+    start->terrain = Normal;
+    start->terrainCostMultiplier = getTerrainCost(*start);
     
     std::vector<Node*> openList, closedList;
     start->g = 0;
@@ -45,7 +64,7 @@ std::vector<Node*> astar(Node* start, Node* goal, std::vector<std::vector<Node>>
     while (!openList.empty())
     {
         // Get the node with the lowest f value
-        auto currentNode = min_element(openList.begin(), openList.end(), [](const Node* a, const Node* b)
+        auto currentNode = std::min_element(openList.begin(), openList.end(), [](const Node* a, const Node* b)
         {
             return a->f < b->f;
         });
@@ -63,15 +82,15 @@ std::vector<Node*> astar(Node* start, Node* goal, std::vector<std::vector<Node>>
                 path.push_back(current);
                 current = current->parent;
             }
-            reverse(path.begin(), path.end());
+            std::reverse(path.begin(), path.end());
             return path;
         }
 
         // Generate children
         for (int dx = -1; dx <= 1; ++dx)
-            {
+        {
             for (int dy = -1; dy <= 1; ++dy)
-                {
+            {
                 if (dx == 0 && dy == 0)
                 {
                     continue; // Skip the current node
@@ -93,16 +112,16 @@ std::vector<Node*> astar(Node* start, Node* goal, std::vector<std::vector<Node>>
                 }
 
                 // Child is on the closedList
-                if (find(closedList.begin(), closedList.end(), &child) != closedList.end())
+                if (std::find(closedList.begin(), closedList.end(), &child) != closedList.end())
                 {
                     continue;
                 }
 
-                float tentative_g = current->g + distance(*current, child);
+                float tentative_g = current->g + distance(*current, child) * child.terrainCostMultiplier;
                 bool isNewPath = false;
 
                 // Check if the child is already in the open list
-                auto it = find(openList.begin(), openList.end(), &child);
+                auto it = std::find(openList.begin(), openList.end(), &child);
                 if (it == openList.end())
                 {
                     isNewPath = true;
@@ -136,27 +155,37 @@ void printGridWithPath(const std::vector<std::vector<Node>>& grid, const std::ve
         {
             const Node& node = grid[i][j];
             Node nodal = grid[i][j];
-            if (find(path.begin(), path.end(), &node) != path.end())
+            if (std::find(path.begin(), path.end(), &node) != path.end())
             {
                 std::cout << "* "; // Mark path nodes with *
-                nodal.terrain = Normal;
             }
-            else if (node.obstacle)
+            else if (node.obstacle || node.terrain == Obstacle)
             {
                 std::cout << "X "; // Mark obstacle nodes with X
-                nodal.terrain = Obstacle;
+            }
+            else if(node.terrain == Normal)
+            {
+                std::cout << "N "; // Mark empty nodes with E
+            }
+            else if(node.terrain == Challenging)
+            {
+                std::cout << "C "; // Mark empty nodes with E
+            }
+            else if(node.terrain == Difficult)
+            {
+                std::cout << "D "; // Mark empty nodes with E
             }
             else
             {
                 std::cout << "E "; // Mark empty nodes with E
-                nodal.terrain = Normal;
             }
         }
         std::cout << '\n';
     }
 }
 
-int main() {
+int main()
+{
     std::vector<std::vector<Node>> grid(rows, std::vector<Node>(cols));
 
     // Initialize grid with nodes and set obstacles
@@ -168,9 +197,23 @@ int main() {
             grid[i][j].y = j;
             grid[i][j].obstacle = false;
             grid[i][j].parent = nullptr;
+            
+            // Assign terrain types
+            if (grid[i][j].obstacle)
+            {
+                grid[i][j].terrain = Obstacle;
+            }
+            else
+            {
+                grid[i][j].terrain = Normal;
+                grid[i][j].terrainCostMultiplier = getTerrainCost(grid[i][j]);
+            }
         }
     }
 
+    Node* start = grid[0].data(); // Set start node
+    Node* goal = &grid[rows - 1][cols - 1];  // Set goal node
+    
     // Set obstacles
     grid[5][0].obstacle = true;
     grid[5][1].obstacle = true;
@@ -192,10 +235,17 @@ int main() {
     grid[2][6].obstacle = true;
     grid[2][7].obstacle = true;
     grid[2][8].obstacle = true;
-
-    Node* start = grid[0].data(); // Set start node
-    Node* goal = &grid[rows - 1][cols - 1];  // Set goal node
-
+    
+    grid[5][4].terrain = Challenging;
+    
+    grid[6][6].terrain = Difficult;
+    grid[6][7].terrain = Difficult;
+    grid[6][8].terrain = Difficult;
+    
+    grid[8][2].terrain = Difficult;
+    grid[8][3].terrain = Difficult;
+    grid[8][4].terrain = Difficult;
+    
     // Call A* algorithm
     std::vector<Node*> path = astar(start, goal, grid);
 
