@@ -30,7 +30,7 @@ void printSolution(int dist[])
 	cout << "Vertex \t\t Distance from Source" << '\n';
 	for (int i = 0; i < V; i++)
 	{
-		cout << i << " \t\t" << dist[i] << '\n';
+		cout << i << " \t\t" << dist[i] << "\t" <<'\n';
 	}
 }
 
