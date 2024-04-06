@@ -181,6 +181,7 @@ void printGridWithPath(const std::vector<std::vector<Node>>& grid, const std::ve
     }
 }
 
+/*
 int main()
 {
     std::vector<std::vector<Node>> grid(rows, std::vector<Node>(cols));
@@ -277,3 +278,4 @@ int main()
     }
     return 0;
 }
+*/
