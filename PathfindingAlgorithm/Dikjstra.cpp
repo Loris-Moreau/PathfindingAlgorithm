@@ -64,7 +64,6 @@ void dijkstra(int graph[V][V], int src)
 	printSolution(dist);
 }
 
-/*
 int main()
 {
 	int graph[V][V] =
@@ -80,4 +79,3 @@ int main()
 	dijkstra(graph, 0);
 	return 0;
 }
-*/
